@@ -1,0 +1,32 @@
+@startuml
+' hel-lib-proxy 简化模块架构图
+
+' 设置皮肤参数
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam shadowing false
+
+' 定义组件
+package "hel-lib-proxy" {
+  [index.ts] as index
+  [apis.ts] as apis
+  [share.ts] as share
+  [ins.ts] as ins
+}
+
+' 定义外部依赖
+package "外部依赖" {
+  [hel-micro-core] as core
+}
+
+' 定义关系
+index --> apis
+index --> ins
+index --> share
+
+apis --> core
+share --> core
+ins --> apis
+ins --> core
+
+@enduml

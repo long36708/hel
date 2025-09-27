@@ -1,0 +1,75 @@
+@startuml
+' hel-lib-proxy 模块架构图
+
+' 设置皮肤参数
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+skinparam shadowing false
+
+' 定义组件
+package "hel-lib-proxy" {
+  [index.ts\n(模块入口)] as index
+  [apis.ts\n(核心API)] as apis
+  [share.ts\n(共享工具)] as share
+  [ins.ts\n(实例创建)] as ins
+  [consts.ts\n(常量定义)] as consts
+  [typings.ts\n(类型定义)] as typings
+}
+
+' 定义外部依赖
+package "外部依赖" {
+  [hel-micro-core] as core
+  [hel-types] as types
+}
+
+' 定义关系
+index --> apis : 导出
+index --> ins : 导出
+index --> share : 使用
+
+apis --> core : 使用
+apis --> consts : 使用
+apis --> share : 使用
+apis --> typings : 使用
+
+share --> core : 使用
+share --> types : 使用
+share --> typings : 使用
+
+ins --> apis : 使用
+ins --> core : 使用
+
+typings --> types : 使用
+
+' 添加说明
+note top of apis
+  核心功能:
+  - getLib: 获取预加载的库
+  - exposeLib: 暴露库给外部使用
+  - libReady: 标记库已准备就绪
+  - appReady: 标记应用已准备就绪
+  - exposeApp: 暴露应用组件
+  - isSubApp/isMasterApp: 判断应用类型
+  - eventBus: 事件总线
+end note
+
+note top of share
+  共享工具:
+  - getLibObj: 获取库对象
+  - getLibProxy: 创建库代理对象
+  - getMergedOptions: 合并配置选项
+  - mayBindIns: 绑定实例到全局
+end note
+
+note top of ins
+  实例创建:
+  - createInstance: 创建特定平台的实例
+end note
+
+note right of index
+  模块入口:
+  - 导出所有公共API
+  - 绑定实例到全局
+end note
+
+@enduml
